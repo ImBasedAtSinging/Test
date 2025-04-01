@@ -1,0 +1,31 @@
+<!-- templates/manage_users.html -->
+{% extends "layout.html" %}
+{% block content %}
+<h1 class="mb-4">Manage Users</h1>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for user in users %}
+            <tr>
+                <td>{{ user.username }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.role }}</td>
+                <td>
+                    {% if user.role == 'regular' %}
+                        <a href="{{ url_for('update_user_role', user_id=user.id, role='admin') }}" class="btn btn-sm btn-primary">Make Admin</a>
+                    {% else %}
+                        <a href="{{ url_for('update_user_role', user_id=user.id, role='regular') }}" class="btn btn-sm btn-secondary">Make Regular</a>
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+{% block content %}
+<h1 class="mb-4">Welcome, {{ session.username }}!</h1>
+<div class="row">
+    <div class="col-md-8">
+        <h2>Your Task Groups</h2>
+        {% for group in task_groups %}
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <a href="{{ url_for('task_group', group_id=group.id) }}">{{ group.name }}</a>
+                    </h5>
+                    <p class="card-text">{{ group.description }}</p>
+                    <p class="card-text">
+                        <small class="text-muted">
+                            Created: {{ group.created_at.strftime('%Y-%m-%d %H:%M') }} | 
+                            Tasks: {{ group.task_count }}
+                        </small>
+                    </p>
+                </div>
+            </div>
+        {% else %}
+            <p>You don't have any task groups yet.</p>
+        {% endfor %}
+    </div>
+    <div class="col-md-4">
+        <a href="{{ url_for('create_task_group') }}" class="btn btn-primary btn-block mb-3">
+            <i class="fas fa-plus mr-2"></i>Create New Task Group
+        </a>
+    </div>
+</div>
+{% endblock %}

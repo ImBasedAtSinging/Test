@@ -1,0 +1,44 @@
+{% extends "layout.html" %}
+{% block content %}
+<h1 class="mb-4">{{ group.name }}</h1>
+<p>{{ group.description }}</p>
+<div class="row">
+    <div class="col-md-8">
+        <h2>Tasks</h2>
+        {% for task in tasks %}
+            <div class="card mb-3 task-priority-{{ task.priority }}">
+                <div class="card-body">
+                    <h5 class="card-title">{{ task.title }}</h5>
+                    <p class="card-text">{{ task.description }}</p>
+                    <p class="card-text">
+                        <small class="text-muted">
+                            Priority: {{ task.priority.capitalize() }} |
+                            Status: {{ task.status.replace('_', ' ').capitalize() }} |
+                            Due: {% if task.due_date %}{{ task.due_date }}{% else %}Not set{% endif %}
+                        </small>
+                    </p>
+                    {% if task.tags %}
+                        <p>
+                            {% for tag in task.tags.split(',') %}
+                                <span class="tag" style="background-color: {{ tag.color }}">{{ tag }}</span>
+                            {% endfor %}
+                        </p>
+                    {% endif %}
+                    <div class="btn-group" role="group">
+                        <a href="{{ url_for('update_task_status', task_id=task.id, status='pending') }}" class="btn btn-sm btn-outline-secondary">Pending</a>
+                        <a href="{{ url_for('update_task_status', task_id=task.id, status='in_progress') }}" class="btn btn-sm btn-outline-primary">In Progress</a>
+                        <a href="{{ url_for('update_task_status', task_id=task.id, status='completed') }}" class="btn btn-sm btn-outline-success">Completed</a>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <p>No tasks in this group yet.</p>
+        {% endfor %}
+    </div>
+    <div class="col-md-4">
+        <a href="{{ url_for('create_task', group_id=group.id) }}" class="btn btn-primary btn-block mb-3">
+            <i class="fas fa-plus mr-2"></i>Add New Task
+        </a>
+    </div>
+</div>
+{% endblock %}
